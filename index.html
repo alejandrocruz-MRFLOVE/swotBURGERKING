@@ -1,1 +1,727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Grande Resenha FC — Confraternização Oficial</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Biblioteca de Confetes para o Golaço -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Inter:wght@400;600;800&display=swap');
+    .font-display { font-family: 'Teko', sans-serif; }
+    .font-sans { font-family: 'Inter', sans-serif; }
 
+    /* ANIMAÇÃO DO GOLAÇO */
+    @keyframes voarBola {
+      0% { transform: translate(-200px, 150px) scale(0.5) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translate(0, 0) scale(1.5) rotate(720deg); opacity: 1; }
+    }
+
+    @keyframes tremerTela {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-10px, 5px); }
+      40% { transform: translate(10px, -5px); }
+      60% { transform: translate(-5px, -5px); }
+      80% { transform: translate(5px, 5px); }
+    }
+
+    .animar-chute {
+      animation: voarBola 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .tremer {
+      animation: tremerTela 0.4s ease-in-out;
+    }
+  </style>
+</head>
+<body id="corpo-site" class="bg-zinc-950 text-zinc-100 font-sans antialiased selection:bg-yellow-400 selection:text-black transition-all">
+
+  <!-- HERO BANNER COM CONTADOR REGRESSIVO -->
+  <header class="relative bg-cover bg-center border-b-4 border-yellow-400" style="background-image: linear-gradient(to bottom, rgba(9, 9, 11, 0.85), rgba(9, 9, 11, 0.95)), url('https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=1200&q=80');">
+    <div class="max-w-4xl mx-auto px-4 py-12 text-center space-y-6">
+      <div class="inline-flex items-center gap-2 bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+        ⚽ Evento Confirmado • Edição Ouro
+      </div>
+      
+      <h1 class="text-5xl md:text-7xl font-black font-display uppercase tracking-wide text-yellow-400 leading-none drop-shadow-md">
+        A Grande Resenha: Futebol, Cerveja & Churrasco
+      </h1>
+      
+      <p class="text-lg md:text-xl font-semibold text-zinc-200 max-w-2xl mx-auto">
+        <b>Tema:</b> Churrasco Completo, Futebol Society, Piscina e Muito Pagode.
+      </p>
+
+      <!-- CONTADOR REGRESSIVO INTERATIVO -->
+      <div class="bg-zinc-900/90 border-2 border-yellow-400/50 p-4 rounded-2xl max-w-md mx-auto shadow-xl">
+        <p class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">⏱️ Contagem Regressiva para o Apito Inicial:</p>
+        <div class="grid grid-cols-4 gap-2 text-center">
+          <div class="bg-zinc-800 p-2 rounded-xl border border-zinc-700">
+            <span id="timer-dias" class="block text-2xl font-black font-display text-white">00</span>
+            <span class="text-[10px] text-zinc-400 uppercase font-bold">Dias</span>
+          </div>
+          <div class="bg-zinc-800 p-2 rounded-xl border border-zinc-700">
+            <span id="timer-horas" class="block text-2xl font-black font-display text-white">00</span>
+            <span class="text-[10px] text-zinc-400 uppercase font-bold">Horas</span>
+          </div>
+          <div class="bg-zinc-800 p-2 rounded-xl border border-zinc-700">
+            <span id="timer-min" class="block text-2xl font-black font-display text-white">00</span>
+            <span class="text-[10px] text-zinc-400 uppercase font-bold">Min</span>
+          </div>
+          <div class="bg-zinc-800 p-2 rounded-xl border border-zinc-700">
+            <span id="timer-seg" class="block text-2xl font-black font-display text-yellow-400">00</span>
+            <span class="text-[10px] text-zinc-400 uppercase font-bold">Seg</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex flex-col sm:flex-row justify-center gap-3">
+        <a href="#confirmar" class="bg-yellow-400 hover:bg-yellow-300 text-black font-black px-8 py-3.5 rounded-xl uppercase tracking-wider text-sm transition shadow-lg flex items-center justify-center gap-2">
+          <i data-lucide="qr-code" class="w-5 h-5"></i> Confirmar Presença & Pix
+        </a>
+        <a href="#detalhes" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-3.5 rounded-xl uppercase tracking-wider text-sm transition border border-zinc-700 flex items-center justify-center gap-2">
+          <i data-lucide="info" class="w-5 h-5"></i> Ver Programação
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10 space-y-12" id="detalhes">
+
+    <!-- SLIDE 2: OBJETIVO DA CONFRATERNIZAÇÃO -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+      <div class="grid md:grid-cols-3 gap-6 items-center">
+        <div class="md:col-span-2 space-y-3">
+          <span class="text-xs uppercase font-extrabold text-yellow-400 tracking-widest">Slide 2 • Objetivo da Confraternização</span>
+          <h2 class="text-3xl font-black font-display uppercase text-zinc-100">O que a turma deseja alcançar com o evento?</h2>
+          <div class="grid sm:grid-cols-3 gap-3 pt-2">
+            <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 space-y-1">
+              <span class="text-xl">🤝</span>
+              <h3 class="font-bold text-xs text-yellow-400">Fortalecer Laços</h3>
+              <p class="text-[11px] text-zinc-300">Aproximar a turma fora da rotina do dia a dia.</p>
+            </div>
+            <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 space-y-1">
+              <span class="text-xl">🎉</span>
+              <h3 class="font-bold text-xs text-yellow-400">Celebrar Conquistas</h3>
+              <p class="text-[11px] text-zinc-300">Comemorar vitórias e metas alcançadas.</p>
+            </div>
+            <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 space-y-1">
+              <span class="text-xl">🏁</span>
+              <h3 class="font-bold text-xs text-yellow-400">Encerrar o Ciclo</h3>
+              <p class="text-[11px] text-zinc-300">Fechar essa etapa com chave de ouro.</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden border-2 border-zinc-700 h-48 md:h-full">
+          <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="Amigos Comemorando Futebol" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 & 4: DATA, HORÁRIO E LOCAL DO EVENTO -->
+    <section class="grid md:grid-cols-2 gap-6">
+      <div class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between shadow-xl">
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 text-yellow-400">
+            <i data-lucide="calendar" class="w-7 h-7"></i>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-zinc-400 block">Slide 3</span>
+              <h3 class="text-2xl font-black font-display uppercase text-zinc-100">Data, Horário e Duração</h3>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm text-zinc-300">
+            <p class="flex justify-between border-b border-zinc-800 pb-2">
+              <span class="text-zinc-400">Início do Evento:</span> <b class="text-white">11:00h</b>
+            </p>
+            <p class="flex justify-between border-b border-zinc-800 pb-2">
+              <span class="text-zinc-400">Término Previsto:</span> <b class="text-white">19:00h</b>
+            </p>
+            <p class="flex justify-between">
+              <span class="text-zinc-400">Duração Total:</span> <b class="text-yellow-400">8 Horas de Resenha</b>
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center gap-3 bg-zinc-800/80 p-3 rounded-xl border border-zinc-700">
+            <img src="https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&w=200&q=80" alt="Relógio/Cronograma" class="w-12 h-12 rounded-lg object-cover flex-shrink-0 border border-zinc-600">
+            <div class="text-xs text-zinc-300">
+              <b class="text-yellow-400 block">Cronograma Simples:</b>
+              <span>11h Chegada • 12h Futebol • 14h Churrasco & Piscina</span>
+            </div>
+          </div>
+          <button onclick="adicionarAgenda()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-yellow-400 font-bold py-2 px-3 rounded-xl text-xs uppercase transition border border-yellow-400/30 flex items-center justify-center gap-2">
+            <i data-lucide="bell" class="w-4 h-4"></i> Salvar Lembrete na Agenda
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 space-y-4 flex flex-col justify-between shadow-xl">
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 text-emerald-400">
+            <i data-lucide="map-pin" class="w-7 h-7"></i>
+            <div>
+              <span class="text-[10px] uppercase font-bold text-zinc-400 block">Slide 4</span>
+              <h3 class="text-2xl font-black font-display uppercase text-zinc-100">Local do Evento</h3>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-bold text-lg text-yellow-400">Recanto & CT Esportivo Recanto das Palmeiras</h4>
+            <p class="text-xs text-zinc-400 mt-1">
+              <b>Por que este local foi escolhido?</b> Estrutura completa de Centro de Treinamento com campo de futebol society, área ampla com piscina, salão coberto com churrasqueira e freezer.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="rounded-xl overflow-hidden border border-zinc-700 h-28 relative">
+            <img src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?auto=format&fit=crop&w=1000&q=80" alt="Visão Panorâmica do Campo de Futebol Society" class="w-full h-full object-cover">
+            <div class="absolute bottom-2 right-2 bg-black/80 px-2 py-1 rounded text-[10px] text-yellow-400 font-bold">
+              Visão Panorâmica do Recanto / CT
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <a href="https://maps.google.com" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold py-2 px-3 rounded-xl text-[11px] uppercase text-center transition flex items-center justify-center gap-1.5 border border-zinc-700">
+              <i data-lucide="navigation" class="w-3.5 h-3.5 text-emerald-400"></i> Google Maps
+            </a>
+            <button onclick="abrirWaze()" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold py-2 px-3 rounded-xl text-[11px] uppercase text-center transition flex items-center justify-center gap-1.5 border border-zinc-700">
+              <i data-lucide="car" class="w-3.5 h-3.5 text-sky-400"></i> Waze / Uber
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: PLANEJAMENTO FINANCEIRO -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 md:p-8 space-y-6 shadow-2xl">
+      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+        <div>
+          <span class="text-xs uppercase font-extrabold text-yellow-400 tracking-widest">Slide 5 • Planejamento Financeiro</span>
+          <h2 class="text-3xl font-black font-display uppercase text-zinc-100">Estimativa de Gastos & Vaquinha</h2>
+        </div>
+        <span class="text-xs font-mono bg-emerald-950 text-emerald-400 border border-emerald-800 px-3 py-1 rounded-full w-fit">Arrecadação Transparente</span>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 items-center">
+        <div class="md:col-span-2 bg-zinc-800/60 p-4 rounded-xl border border-zinc-700 space-y-2 text-xs">
+          <p class="font-bold text-yellow-400 uppercase text-sm">📊 Quanto Custará (Estimativa de Gastos):</p>
+          <div class="flex justify-between border-b border-zinc-700/60 pb-1.5 text-zinc-300">
+            <span>• Locação do Recanto/CT (Campo, Piscina & Estrutura):</span> <b>R$ 1.200,00</b>
+          </div>
+          <div class="flex justify-between border-b border-zinc-700/60 pb-1.5 text-zinc-300">
+            <span>• Carnes, Acompanhamentos e Churrasqueiro:</span> <b>R$ 1.800,00</b>
+          </div>
+          <div class="flex justify-between border-b border-zinc-700/60 pb-1.5 text-zinc-300">
+            <span>• Bebidas (Cerveja, Drinks, Refri, Água e Gelo):</span> <b>R$ 1.200,00</b>
+          </div>
+          <div class="flex justify-between border-b border-zinc-700/60 pb-1.5 text-zinc-300">
+            <span>• Descartáveis, Som, Limpeza e Utensílios:</span> <b>R$ 300,00</b>
+          </div>
+          <div class="flex justify-between font-bold text-sm text-yellow-400 pt-1">
+            <span>Total Estimado: <b>R$ 4.500,00</b></span>
+            <span class="text-emerald-400">Vaquinha via Pix</span>
+          </div>
+        </div>
+
+        <div class="rounded-xl overflow-hidden border-2 border-zinc-700 h-44 flex flex-col justify-center items-center relative">
+          <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80" alt="Planejamento Financeiro Vaquinha" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-black/40 flex items-center justify-center p-2 text-center">
+            <span class="text-xs font-bold text-white bg-zinc-900/90 px-3 py-1.5 rounded-lg border border-yellow-400">Arrecadação Coletiva</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: CARDÁPIO E BEBIDAS -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl overflow-hidden shadow-2xl grid md:grid-cols-2">
+      <div class="p-6 md:p-8 space-y-4">
+        <div>
+          <span class="text-xs uppercase font-extrabold text-yellow-400 tracking-widest">Slide 6</span>
+          <h2 class="text-3xl font-black font-display uppercase text-zinc-100">Cardápio & Bebidas</h2>
+        </div>
+
+        <div class="space-y-3 text-sm text-zinc-300">
+          <div>
+            <b class="text-yellow-400 uppercase text-xs block mb-1">Comidas Oferecidas:</b>
+            <p>Picanha, Fraldinha, Cupim, Linguiça Toscana, Pão de Alho, Arroz, Farofa Caseira e Vinagrete.</p>
+          </div>
+          <div>
+            <b class="text-yellow-400 uppercase text-xs block mb-1">Bebidas Oferecidas:</b>
+            <p>Cerveja Pilsen e Puro Malte trincando, Drinks, Refrigerantes e Água Mineral.</p>
+          </div>
+          
+          <div class="bg-emerald-950/80 border border-emerald-500/50 p-3.5 rounded-xl space-y-1">
+            <span class="text-xs font-bold text-emerald-400 uppercase block">🥗 Opções Vegetarianas & Sem Açúcar:</span>
+            <p class="text-xs text-zinc-300">
+              <b>Sim, haverá!</b> Espetinhos de queijo coalho, legumes grelhados na brasa e refrigerantes Zero Açúcar.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-rows-2 h-64 md:h-auto border-t-2 md:border-t-0 md:border-l-2 border-zinc-800">
+        <div class="bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80');"></div>
+        <div class="bg-cover bg-center border-t border-zinc-800" style="background-image: url('https://images.unsplash.com/photo-1608270586620-248524c67de9?auto=format&fit=crop&w=600&q=80');"></div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: ATRAÇÕES E ATIVIDADES -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 md:p-8 space-y-6 shadow-2xl">
+      <div>
+        <span class="text-xs uppercase font-extrabold text-yellow-400 tracking-widest">Slide 7</span>
+        <h2 class="text-3xl font-black font-display uppercase text-zinc-100">Atrações e Atividades</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+        <div class="bg-zinc-800/90 rounded-xl border border-zinc-700 overflow-hidden flex flex-col justify-between">
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=300&q=80" alt="Música e Playlist" class="h-24 w-full object-cover">
+          <div class="p-3 space-y-1">
+            <p class="font-bold text-yellow-400 uppercase">Música & Som</p>
+            <p class="text-zinc-400">Caixa de som JBL com Playlist de Pagode e Sertanejo.</p>
+          </div>
+        </div>
+
+        <div class="bg-zinc-800/90 rounded-xl border border-zinc-700 overflow-hidden flex flex-col justify-between">
+          <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=300&q=80" alt="Amigos Jogando Futebol Society" class="h-24 w-full object-cover">
+          <div class="p-3 space-y-1">
+            <p class="font-bold text-yellow-400 uppercase">Futebol Society & Piscina</p>
+            <p class="text-zinc-400">Torneio oficial no campo e liberado a piscina do recanto.</p>
+          </div>
+        </div>
+
+        <div class="bg-zinc-800/90 rounded-xl border border-zinc-700 overflow-hidden flex flex-col justify-between">
+          <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=300&q=80" alt="Sorteios e Prêmios" class="h-24 w-full object-cover">
+          <div class="p-3 space-y-1">
+            <p class="font-bold text-yellow-400 uppercase">Sorteios de Prêmios</p>
+            <p class="text-zinc-400">Sorteio de brindes e kit churrasco aos presentes.</p>
+          </div>
+        </div>
+
+        <div class="bg-zinc-800/90 rounded-xl border border-zinc-700 overflow-hidden flex flex-col justify-between">
+          <img src="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=300&q=80" alt="Homenagens e Medalhas" class="h-24 w-full object-cover">
+          <div class="p-3 space-y-1">
+            <p class="font-bold text-yellow-400 uppercase">Discursos & Medalhas</p>
+            <p class="text-zinc-400">Entrega dos troféus zueira para os destaques da turma.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-zinc-800/50 p-4 rounded-xl border border-zinc-700 space-y-3">
+        <p class="text-xs font-bold text-zinc-300 uppercase">🗳️ Votação Rápida: O que você prefere ouvir?</p>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="votar(this, 'Pagode')" class="vote-btn bg-zinc-800 border border-zinc-600 hover:border-yellow-400 text-zinc-200 px-3 py-1.5 rounded-lg text-xs font-bold transition">🥁 Pagode / Samba</button>
+          <button onclick="votar(this, 'Sertanejo')" class="vote-btn bg-zinc-800 border border-zinc-600 hover:border-yellow-400 text-zinc-200 px-3 py-1.5 rounded-lg text-xs font-bold transition">🤠 Sertanejo</button>
+          <button onclick="votar(this, 'Rock/Pop')" class="vote-btn bg-zinc-800 border border-zinc-600 hover:border-yellow-400 text-zinc-200 px-3 py-1.5 rounded-lg text-xs font-bold transition">🎸 Rock / Pop</button>
+          
+          <a href="https://spotify.com" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs transition flex items-center gap-1.5">
+            <i data-lucide="radio" class="w-3.5 h-3.5"></i> Abrir Playlist Spotify
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: RESPONSÁVEIS E DIVISÃO DE TAREFAS -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 md:p-8 space-y-4 shadow-2xl">
+      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+        <div>
+          <span class="text-xs uppercase font-extrabold text-yellow-400 tracking-widest">Slide 8 • Quem ficará responsável por cada parte?</span>
+          <h2 class="text-3xl font-black font-display uppercase text-zinc-100">Divisão de Tarefas</h2>
+        </div>
+        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=150&q=80" alt="Equipe Colaborando" class="w-20 h-12 rounded-lg object-cover border border-zinc-700 hidden sm:block">
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-zinc-800/80 p-4 rounded-xl border border-zinc-700 space-y-2 flex flex-col justify-between">
+          <div>
+            <p class="text-xs uppercase font-extrabold text-yellow-400">🔥 Churrasco & Compras</p>
+            <p class="font-bold text-base text-zinc-100">Lucas & Mateus</p>
+            <p class="text-[11px] text-zinc-400">Comprar carnes, suprimentos e comandar a churrasqueira.</p>
+          </div>
+          <button onclick="contatarResp('Lucas & Mateus')" class="w-full bg-zinc-700 hover:bg-zinc-600 text-xs font-bold py-1.5 rounded-lg transition flex items-center justify-center gap-1 text-zinc-200">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-yellow-400"></i> Falar com Lucas/Mateus
+          </button>
+        </div>
+
+        <div class="bg-zinc-800/80 p-4 rounded-xl border border-zinc-700 space-y-2 flex flex-col justify-between">
+          <div>
+            <p class="text-xs uppercase font-extrabold text-emerald-400">⚽ Campo & Sorteios</p>
+            <p class="font-bold text-base text-zinc-100">Gabriel</p>
+            <p class="text-[11px] text-zinc-400">Reservar o recanto/CT, levar bolas e organizar o torneio.</p>
+          </div>
+          <button onclick="contatarResp('Gabriel')" class="w-full bg-zinc-700 hover:bg-zinc-600 text-xs font-bold py-1.5 rounded-lg transition flex items-center justify-center gap-1 text-zinc-200">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-emerald-400"></i> Falar com Gabriel
+          </button>
+        </div>
+
+        <div class="bg-zinc-800/80 p-4 rounded-xl border border-zinc-700 space-y-2 flex flex-col justify-between">
+          <div>
+            <p class="text-xs uppercase font-extrabold text-amber-400">💰 Tesouraria & Pix</p>
+            <p class="font-bold text-base text-zinc-100">Amanda</p>
+            <p class="text-[11px] text-zinc-400">Arrecadar o dinheiro via Pix e prestar contas à turma.</p>
+          </div>
+          <button onclick="contatarResp('Amanda')" class="w-full bg-zinc-700 hover:bg-zinc-600 text-xs font-bold py-1.5 rounded-lg transition flex items-center justify-center gap-1 text-zinc-200">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5 text-amber-400"></i> Falar com Amanda
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: DIVULGAÇÃO DO EVENTO -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 md:p-8 space-y-4 shadow-2xl">
+      <div>
+        <span class="text-xs uppercase font-extrabold text-yellow-400 tracking-widest">Slide 9</span>
+        <h2 class="text-3xl font-black font-display uppercase text-zinc-100">Divulgação do Evento</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4 items-center">
+        <div class="sm:col-span-2 bg-zinc-800/60 p-4 rounded-xl border border-zinc-700 space-y-3">
+          <p class="text-sm font-bold text-yellow-400 uppercase">Como será feito o convite?</p>
+          <p class="text-xs text-zinc-300 leading-relaxed">
+            O convite será enviado no formato <b>Digital</b> via <b>Mensagem no Celular / WhatsApp</b>, além de divulgação via <b>Boca a Boca</b> no presencial e postagens nas <b>Redes Sociais</b> da turma.
+          </p>
+          <a href="https://wa.me/" target="_blank" class="w-full sm:w-fit bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center gap-2">
+            <i data-lucide="message-square" class="w-4 h-4"></i> Enviar Mensagem no Grupo
+          </a>
+        </div>
+        <div class="rounded-xl overflow-hidden border border-zinc-700 h-32">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80" alt="Convite Mensagem no Celular" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </section>
+
+    <!-- ÁREA DE CONFIRMAÇÃO COM ANIMAÇÃO DE GOLAÇO -->
+    <section id="confirmar" class="bg-gradient-to-br from-zinc-900 via-zinc-900 to-emerald-950 border-4 border-yellow-400 rounded-3xl p-6 md:p-10 shadow-2xl space-y-6 relative overflow-hidden">
+      <div class="text-center space-y-2">
+        <span class="bg-yellow-400 text-black font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider">Garanta sua Vaga</span>
+        <h2 class="text-4xl md:text-5xl font-black font-display uppercase text-zinc-100">Confirmar Presença & Pix</h2>
+        <p class="text-sm text-zinc-300 max-w-lg mx-auto">
+          Preencha seus dados, clique em enviar e faça o Pix para garantir a locação do recanto/CT com piscina e churrasco completo.
+        </p>
+      </div>
+
+      <!-- BARRA DE PROGRESSO DA VAQUINHA -->
+      <div class="max-w-md mx-auto bg-zinc-800/90 p-3.5 rounded-xl border border-zinc-700 space-y-1">
+        <div class="flex justify-between text-xs font-bold">
+          <span class="text-yellow-400">Meta de Arrecadação:</span>
+          <span class="text-emerald-400">R$ 3.600 / R$ 4.500 (80%)</span>
+        </div>
+        <div class="w-full bg-zinc-950 h-3 rounded-full overflow-hidden border border-zinc-700">
+          <div class="bg-gradient-to-r from-yellow-400 to-emerald-400 h-full w-[80%] rounded-full"></div>
+        </div>
+      </div>
+
+      <div class="max-w-md mx-auto bg-zinc-900/90 border border-zinc-700 p-6 rounded-2xl space-y-4 shadow-xl">
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs font-bold uppercase text-zinc-400 block mb-1">Seu Nome / Apelido:</label>
+            <input type="text" id="jogador-nome" placeholder="Ex: Lucas Picanha" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-yellow-400">
+          </div>
+
+          <div>
+            <label class="text-xs font-bold uppercase text-zinc-400 block mb-1">Sua Posição no Dia:</label>
+            <select id="posicao-select" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-sm text-yellow-400 font-bold focus:outline-none">
+              <option value="Atacante">⚽ Atacante (Artilheiro da Resenha)</option>
+              <option value="Meio-Campo">👟 Meio-Campo (Garçom do Time)</option>
+              <option value="Zagueiro">🛡️ Zagueiro / Volante (Cão de Guarda)</option>
+              <option value="Goleiro">🧤 Goleiro (Muralha Oficial)</option>
+              <option value="Piscina / Churrasco">🏊 King da Piscina / Goleiro de Copo</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold uppercase text-zinc-400 block mb-1">Quantidade de participantes:</label>
+            <select id="pax-select" onchange="atualizarValores()" class="w-full bg-zinc-800 border border-zinc-600 rounded-xl p-2.5 text-sm text-white font-bold focus:outline-none">
+              <option value="1">1 Pessoa — Apenas Eu (R$ 150,00)</option>
+              <option value="2">2 Pessoas — Eu + 1 Acompanhante (R$ 300,00)</option>
+              <option value="3">3 Pessoas — Eu + 2 Acompanhantes (R$ 450,00)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-emerald-950/80 border-2 border-emerald-500 p-3.5 rounded-xl text-center space-y-0.5">
+          <span class="text-[11px] uppercase font-extrabold text-emerald-400 tracking-wider">Valor Total a Transferir</span>
+          <p id="valor-total" class="text-3xl font-black font-display text-yellow-400">R$ 150,00</p>
+        </div>
+
+        <!-- BOTÃO DE ENVIAR QUE DISPARA A ANIMAÇÃO DE GOL -->
+        <button onclick="dispararGolaço()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black py-3.5 rounded-xl uppercase tracking-wider text-sm transition shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="send" class="w-5 h-5"></i> Enviar Presença & Marcar Golaço! ⚽🏃‍♂️
+        </button>
+
+        <div class="space-y-2 pt-2 border-t border-zinc-800">
+          <label class="text-xs font-bold uppercase text-zinc-400 block text-center">Chave Pix (Celular):</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="pix-key" readonly value="(44) 99999-9999" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-center font-mono font-bold text-white text-sm">
+            <button onclick="copiarChave()" class="bg-yellow-400 hover:bg-yellow-300 text-black font-black p-2.5 rounded-xl transition flex-shrink-0" title="Copiar Pix">
+              <i data-lucide="copy" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <p id="copy-msg" class="text-[11px] text-emerald-400 font-bold text-center hidden">✓ Chave Pix copiada para a área de transferência!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MURAL DA RESENHA INTERATIVO -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 md:p-8 space-y-4 shadow-2xl">
+      <div class="flex items-center gap-2 text-yellow-400">
+        <i data-lucide="message-square" class="w-6 h-6"></i>
+        <h2 class="text-2xl font-black font-display uppercase text-zinc-100">Mural da Resenha (Recados da Turma)</h2>
+      </div>
+
+      <div id="mural-lista" class="space-y-2">
+        <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 text-xs space-y-1">
+          <div class="flex justify-between font-bold">
+            <span class="text-yellow-400">Mateus (Atacante):</span>
+            <span class="text-zinc-500">Hoje às 14:20</span>
+          </div>
+          <p class="text-zinc-300">"Prepara a calção de banho e a chuteira que esse ano o evento no recanto vai ser sinistro! ⚽🏊‍♂️"</p>
+        </div>
+        <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 text-xs space-y-1">
+          <div class="flex justify-between font-bold">
+            <span class="text-emerald-400">Gabriel (Muralha):</span>
+            <span class="text-zinc-500">Hoje às 15:10</span>
+          </div>
+          <p class="text-zinc-300">"Pode vir quente que no meu gol não passa nada e na piscina ninguém me ganha no salto!"</p>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <input type="text" id="recado-input" placeholder="Deixe sua provocação ou recado no mural..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none">
+        <button onclick="postarRecado()" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-4 rounded-xl text-xs uppercase font-extrabold transition">
+          Enviar
+        </button>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: AVALIAÇÃO DE RESULTADOS & GALERIA INTERATIVA -->
+    <section class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-6 md:p-8 space-y-4 shadow-2xl">
+      <div>
+        <span class="text-xs uppercase font-extrabold text-yellow-400 tracking-widest">Slide 10</span>
+        <h2 class="text-3xl font-black font-display uppercase text-zinc-100">Avaliação de Resultados Esperados</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4 items-center">
+        <div class="sm:col-span-2 bg-zinc-800/60 p-4 rounded-xl border border-zinc-700 space-y-3">
+          <p class="text-xs font-bold text-yellow-400 uppercase">Como saber se o evento foi um sucesso?</p>
+          <p class="text-xs text-zinc-300 leading-relaxed">
+            A avaliação será feita através de um <b>bate-papo pós-evento</b>, envio de <b>pesquisa de satisfação rápida</b>, publicação das <b>fotos do evento na galeria</b> e entrega de <b>medalhas e lembranças</b> para a turma.
+          </p>
+
+          <div class="pt-2 border-t border-zinc-700/60 space-y-2">
+            <p class="text-[11px] font-bold text-zinc-400 uppercase text-center">Deixe sua expectativa:</p>
+            <div class="flex justify-center gap-2">
+              <button onclick="avaliar('😍')" class="p-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 rounded-xl text-xs font-bold transition">😍 Excelente</button>
+              <button onclick="avaliar('⚽')" class="p-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 rounded-xl text-xs font-bold transition">⚽ Vai ser Fera!</button>
+              <button onclick="avaliar('🥇')" class="p-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 rounded-xl text-xs font-bold transition">🥇 Nota 10</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl overflow-hidden border border-zinc-700 h-40 relative group">
+          <img id="galeria-img" src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&w=400&q=80" alt="Galeria de Lembranças" class="w-full h-full object-cover transition duration-300">
+          <button onclick="mudarFoto()" class="absolute inset-y-0 right-0 bg-black/60 px-2 text-yellow-400 hover:bg-black/90 font-bold text-xs flex items-center">
+            ▶
+          </button>
+          <div class="absolute bottom-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-zinc-300 font-bold">
+            Galeria do Evento
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- OVERLAY DE ANIMAÇÃO DE GOLAÇO (INICIALMENTE OCULTO) -->
+  <div id="overlay-gol" class="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center hidden backdrop-blur-md">
+    <div class="relative text-center space-y-6">
+      <!-- O SITE VIRANDO BOLA QUE É CHUTADA -->
+      <div id="bola-animada" class="w-32 h-32 md:w-48 md:h-48 bg-white rounded-full shadow-[0_0_50px_rgba(234,179,8,0.8)] border-4 border-black flex items-center justify-center text-6xl mx-auto opacity-0">
+        ⚽
+      </div>
+
+      <div id="texto-gol" class="space-y-2 opacity-0 transition-opacity duration-500">
+        <h2 class="text-6xl md:text-8xl font-black font-display uppercase tracking-widest text-yellow-400 drop-shadow-[0_5px_5px_rgba(0,0,0,0.9)]">
+          GOLAÇO! ⚽🔥
+        </h2>
+        <p class="text-xl md:text-2xl font-bold text-white uppercase tracking-wider">
+          Presença confirmada com sucesso por <span id="nome-confirmado" class="text-yellow-400">Craque</span>!
+        </p>
+        <p class="text-xs text-zinc-400">Obrigado por garantir sua vaga no evento do ano!</p>
+      </div>
+
+      <button onclick="fecharGol()" class="mt-4 bg-yellow-400 hover:bg-yellow-300 text-black font-black px-6 py-3 rounded-xl uppercase text-xs tracking-wider transition opacity-0" id="btn-continuar">
+        Continuar na Resenha 🚀
+      </button>
+    </div>
+  </div>
+
+  <footer class="border-t-2 border-zinc-800 bg-zinc-900 py-6 text-center text-xs text-zinc-500">
+    <p>A Grande Resenha FC © Confraternização de Turma.</p>
+  </footer>
+
+  <script>
+    // TIMER REGRESSIVO
+    function atualizarTimer() {
+      const agora = new Date();
+      const dias = 12 - (agora.getDate() % 12);
+      const horas = 23 - agora.getHours();
+      const min = 59 - agora.getMinutes();
+      const seg = 59 - agora.getSeconds();
+
+      document.getElementById('timer-dias').innerText = dias < 10 ? '0' + dias : dias;
+      document.getElementById('timer-horas').innerText = horas < 10 ? '0' + horas : horas;
+      document.getElementById('timer-min').innerText = min < 10 ? '0' + min : min;
+      document.getElementById('timer-seg').innerText = seg < 10 ? '0' + seg : seg;
+    }
+    setInterval(atualizarTimer, 1000);
+    atualizarTimer();
+
+    // CÁLCULO DE VALORES
+    function atualizarValores() {
+      const pax = parseInt(document.getElementById('pax-select').value);
+      const total = pax * 150;
+      document.getElementById('valor-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    // COPIAR PIX
+    function copiarChave() {
+      const pixInput = document.getElementById('pix-key');
+      navigator.clipboard.writeText(pixInput.value);
+      
+      const msg = document.getElementById('copy-msg');
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+    }
+
+    // ANIMAÇÃO DO GOLAÇO AO CLICAR EM ENVIAR
+    function dispararGolaço() {
+      const nomeInput = document.getElementById('jogador-nome').value.trim();
+      const nomeCraque = nomeInput !== "" ? nomeInput : "Craque da Turma";
+      document.getElementById('nome-confirmado').innerText = nomeCraque;
+
+      const overlay = document.getElementById('overlay-gol');
+      const bola = document.getElementById('bola-animada');
+      const texto = document.getElementById('texto-gol');
+      const botao = document.getElementById('btn-continuar');
+      const corpo = document.getElementById('corpo-site');
+
+      // Exibe a tela de animação
+      overlay.classList.remove('hidden');
+      corpo.classList.add('tremer');
+
+      // Dispara efeito sonoro sintético via Web Audio API (Som de chute/apito simulado)
+      tocarSomGol();
+
+      // Ativa animação da bola voando pro gol
+      bola.classList.add('animar-chute');
+
+      // Dispara confetes comemorativos na tela
+      setTimeout(() => {
+        confetti({
+          particleCount: 150,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+        texto.classList.remove('opacity-0');
+        botao.classList.remove('opacity-0');
+      }, 700);
+    }
+
+    // FECHAR TELA DE GOLAÇO
+    function fecharGol() {
+      const overlay = document.getElementById('overlay-gol');
+      const bola = document.getElementById('bola-animada');
+      const texto = document.getElementById('texto-gol');
+      const botao = document.getElementById('btn-continuar');
+      const corpo = document.getElementById('corpo-site');
+
+      overlay.classList.add('hidden');
+      corpo.classList.remove('tremer');
+      bola.classList.remove('animar-chute');
+      texto.classList.add('opacity-0');
+      botao.classList.add('opacity-0');
+    }
+
+    // SOM SINTÉTICO DE GOL (BEEP / APITO)
+    function tocarSomGol() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.5);
+      } catch(e) {
+        // Ignora se o navegador bloquear autoplay de áudio
+      }
+    }
+
+    // AVALIAÇÃO
+    function avaliar(emoji) {
+      alert(`Sua expectativa '${emoji}' foi gravada com sucesso!`);
+    }
+
+    // MURAL DE RECADOS
+    function postarRecado() {
+      const input = document.getElementById('recado-input');
+      const texto = input.value.trim();
+      const nome = document.getElementById('jogador-nome').value.trim() || 'Jogador Anônimo';
+      const pos = document.getElementById('posicao-select').value;
+
+      if (!texto) {
+        alert("Digite um recado antes de enviar!");
+        return;
+      }
+
+      const mural = document.getElementById('mural-lista');
+      const novoRecado = document.createElement('div');
+      novoRecado.className = "bg-zinc-800/80 p-3 rounded-xl border border-yellow-400/50 text-xs space-y-1 animate-pulse";
+      novoRecado.innerHTML = `
+        <div class="flex justify-between font-bold">
+          <span class="text-yellow-400">${nome} (${pos}):</span>
+          <span class="text-zinc-500">Agora mesmo</span>
+        </div>
+        <p class="text-zinc-300">"${texto}"</p>
+      `;
+
+      mural.prepend(novoRecado);
+      input.value = '';
+    }
+
+    // TROCA DE FOTOS NA GALERIA
+    const fotos = [
+      "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
+    ];
+    let fotoIndex = 0;
+    function mudarFoto() {
+      fotoIndex = (fotoIndex + 1) % fotos.length;
+      document.getElementById('galeria-img').src = fotos[fotoIndex];
+    }
+
+    function adicionarAgenda() {
+      alert("Lembrete salvo na sua agenda! Data do evento: Sábado do final de semana, às 11:00h.");
+    }
+
+    function abrirWaze() {
+      alert("Redirecionando para a rota do Recanto / CT no Waze/GPS...");
+    }
+
+    function contatarResp(nome) {
+      alert(`Iniciando conversa no WhatsApp com ${nome}...`);
+    }
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
